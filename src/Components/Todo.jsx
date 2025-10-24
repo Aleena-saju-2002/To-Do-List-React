@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { IoMdDoneAll } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
 
 function Todo() {
   const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] =  useState(() => {
+    return JSON.parse(localStorage.getItem("todos")) || []; 
+  });
   const [editId, setEditid] = useState(0);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos)); 
+  }, [todos]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -82,7 +88,7 @@ function Todo() {
       <div className="list">
         <ul>
           {todos.map((to) => (
-            <li className="list-items">
+            <li   key={to.id}  className="list-items">
               <div className="list-item-list" id={to.status ? "list-item" : ""}>
                 {to.list}
               </div>
